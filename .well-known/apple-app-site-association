@@ -1,0 +1,17 @@
+{
+  "appclips": {
+        "apps": ["C4L8Q37YC4.tech.ruslan.giftcards.Clip"]
+  },
+	"applinks": {
+		"apps": [],
+		"details": [{
+			"appID": "C4L8Q37YC4.tech.ruslan.giftcards",
+			"components": [
+				{
+					"/": "*"
+				}
+			],
+			"paths": [ "*" ]
+		}]
+	}
+}
