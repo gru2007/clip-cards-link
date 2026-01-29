@@ -1,11 +1,11 @@
 {
   "appclips": {
-        "apps": ["C4L8Q37YC4.tech.ruslan.giftcards.Clip"]
+        "apps": ["C4L8Q37YC4.tech.artemev.swiftgups.Clip"]
   },
 	"applinks": {
 		"apps": [],
 		"details": [{
-			"appID": "C4L8Q37YC4.tech.ruslan.giftcards",
+			"appID": "C4L8Q37YC4.tech.artemev.swiftgups",
 			"components": [
 				{
 					"/": "*"
