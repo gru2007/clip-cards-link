@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="apple-itunes-app" content="app-clip-bundle-id=tech.artemev.swiftgups.Clip">
+  <title>SwiftGups — App Clip</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      margin: 0;
+      padding: 2rem;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(180deg, #f5f5f7 0%, #e8e8ed 100%);
+      color: #1d1d1f;
+    }
+    .card {
+      max-width: 360px;
+      padding: 2rem;
+      text-align: center;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    }
+    h1 { font-size: 1.5rem; margin: 0 0 0.5rem; }
+    p { color: #666; margin: 0 0 1.5rem; font-size: 0.95rem; }
+    a.open-app {
+      display: inline-block;
+      padding: 12px 24px;
+      background: #007AFF;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 12px;
+      font-weight: 600;
+      -webkit-tap-highlight-color: transparent;
+    }
+    a.open-app:hover { background: #0056b3; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>SwiftGups</h1>
+    <p>Открой в App Clip — расписание без установки приложения.</p>
+    <!-- На iOS с associated domain пользователь увидит баннер/кнопку открыть в App Clip -->
+    <a href="https://clipcards.r-artemev.ru" class="open-app" id="openClip">Открыть в App Clip</a>
+  </div>
+  <script>
+    // Опционально: редирект в App Clip по ссылке (если настроен Universal Link / App Clip URL)
+    // document.getElementById('openClip').href = '/clip'; // путь из AASA paths
+  </script>
+</body>
+</html>
