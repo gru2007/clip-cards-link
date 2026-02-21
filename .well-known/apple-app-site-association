@@ -7,11 +7,8 @@
 		"details": [{
 			"appID": "C4L8Q37YC4.tech.artemev.swiftgups",
 			"components": [
-				{
-					"/": "*"
-				}
 			],
-			"paths": [ "*" ]
+			"paths": [  ]
 		}]
 	}
 }
