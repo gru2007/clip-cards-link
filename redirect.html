@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="referrer" content="no-referrer" />
+  <title>Открыть в Safari</title>
+  <style>
+    :root { color-scheme: light dark; }
+    body {
+      margin: 0; padding: 24px;
+      font-family: -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+      line-height: 1.4;
+    }
+    .wrap { max-width: 720px; margin: 0 auto; }
+    .btns { display: flex; gap: 12px; flex-wrap: wrap; margin: 16px 0 10px; }
+    a.btn, button.btn {
+      appearance: none;
+      display: inline-block;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(127,127,127,.35);
+      background: rgba(127,127,127,.12);
+      text-decoration: none;
+      color: inherit;
+      font-weight: 650;
+      cursor: pointer;
+    }
+    .muted { opacity: .75; font-size: 14px; margin-top: 10px; }
+    code { word-break: break-all; }
+    .box {
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(127,127,127,.25);
+      background: rgba(127,127,127,.08);
+      margin-top: 12px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <h1>Открываем в Safari…</h1>
+    <div class="box">
+      <div class="muted" id="status">Читаю параметр url…</div>
+      <div style="margin-top:8px;"><code id="target">—</code></div>
+    </div>
+
+    <div class="btns">
+      <a class="btn" id="openSafari" href="#">Открыть в Safari</a>
+      <a class="btn" id="openNormal" href="#" rel="noopener noreferrer">Открыть обычной ссылкой</a>
+      <button class="btn" id="copy" type="button">Скопировать ссылку</button>
+    </div>
+
+    <div class="muted">
+      Если Safari не открылся автоматически — нажми “Открыть в Safari”.
+      Некоторые встроенные браузеры блокируют автопереход без нажатия.
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      const qs = new URLSearchParams(location.search);
+      const statusEl = document.getElementById('status');
+      const targetEl = document.getElementById('target');
+      const btnSafari = document.getElementById('openSafari');
+      const btnNormal = document.getElementById('openNormal');
+      const btnCopy = document.getElementById('copy');
+
+      function base64UrlDecode(s) {
+        if (!s) return null;
+        // base64url -> base64
+        s = s.replace(/-/g, '+').replace(/_/g, '/');
+        const pad = s.length % 4 ? '='.repeat(4 - (s.length % 4)) : '';
+        try {
+          // atob -> bytes -> utf8
+          const bin = atob(s + pad);
+          const bytes = Uint8Array.from(bin, c => c.charCodeAt(0));
+          return new TextDecoder('utf-8').decode(bytes);
+        } catch {
+          return null;
+        }
+      }
+
+      const raw = qs.get('url') || qs.get('u') || base64UrlDecode(qs.get('b64'));
+      if (!raw) {
+        statusEl.textContent = 'Нет параметра url. Пример: ?url=https%3A%2F%2Fexample.com';
+        btnSafari.style.display = 'none';
+        btnNormal.style.display = 'none';
+        btnCopy.style.display = 'none';
+        return;
+      }
+
+      let url;
+      try {
+        url = new URL(raw);
+      } catch {
+        statusEl.textContent = 'Некорректный URL в параметре url.';
+        targetEl.textContent = raw;
+        btnSafari.style.display = 'none';
+        btnNormal.style.display = 'none';
+        btnCopy.style.display = 'none';
+        return;
+      }
+
+      // Безопасность: только http/https (иначе открытый редирект в произвольные схемы)
+      if (url.protocol !== 'https:' && url.protocol !== 'http:') {
+        statusEl.textContent = 'Разрешены только http/https ссылки.';
+        targetEl.textContent = url.href;
+        btnSafari.style.display = 'none';
+        btnNormal.style.display = 'none';
+        btnCopy.style.display = 'none';
+        return;
+      }
+
+      const isIOS =
+        /iP(hone|od|ad)/.test(navigator.platform) ||
+        (navigator.userAgent.includes('Mac') && 'ontouchend' in document);
+
+      const safariUrl = (url.protocol === 'https:')
+        ? url.href.replace(/^https:\/\//i, 'x-safari-https://')
+        : url.href.replace(/^http:\/\//i, 'x-safari-http://');
+
+      targetEl.textContent = url.href;
+      btnNormal.href = url.href;
+
+      function tryOpenSafari(userGesture) {
+        if (!isIOS) {
+          statusEl.textContent = 'Не iOS: открываю обычной ссылкой…';
+          location.href = url.href;
+          return;
+        }
+        statusEl.textContent = userGesture
+          ? 'Открываю Safari…'
+          : 'Пробую открыть Safari автоматически…';
+
+        // На iOS webview может запретить без жеста пользователя — кнопка остаётся как fallback
+        location.href = safariUrl;
+
+        // Через ~1.2 сек просто меняем текст (мы не можем надёжно “узнать”, открылось ли Safari)
+        setTimeout(() => {
+          statusEl.textContent =
+            'Если Safari не открылся — нажми “Открыть в Safari” или “Открыть обычной ссылкой”.';
+        }, 1200);
+      }
+
+      btnSafari.addEventListener('click', (e) => {
+        e.preventDefault();
+        tryOpenSafari(true);
+      });
+
+      btnCopy.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(url.href);
+          btnCopy.textContent = 'Скопировано ✓';
+          setTimeout(() => (btnCopy.textContent = 'Скопировать ссылку'), 1200);
+        } catch {
+          // старый fallback
+          const ta = document.createElement('textarea');
+          ta.value = url.href;
+          document.body.appendChild(ta);
+          ta.select();
+          try { document.execCommand('copy'); } catch {}
+          document.body.removeChild(ta);
+          btnCopy.textContent = 'Скопировано ✓';
+          setTimeout(() => (btnCopy.textContent = 'Скопировать ссылку'), 1200);
+        }
+      });
+
+      // Автопопытка (может быть заблокирована in-app браузером — это нормально)
+      setTimeout(() => tryOpenSafari(false), 80);
+    })();
+  </script>
+</body>
+</html>
