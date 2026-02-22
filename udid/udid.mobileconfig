@@ -35,7 +35,7 @@
     <dict>
         <key>URL</key>
         <!-- ↓ Replace with your Cloudflare Worker URL ↓ -->
-        <string>https://udid-worker.YOUR-ACCOUNT.workers.dev/enroll</string>
+        <string>https://udid-worker.rlc.workers.dev/enroll</string>
 
         <key>DeviceAttributes</key>
         <array>
