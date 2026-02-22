@@ -65,8 +65,8 @@ async function handleEnroll(request, env) {
     // The payload inside the envelope is a plain-text plist XML, so we can
     // extract it with a regex without needing to fully parse the DER binary.
     //
-    // Using latin-1 (binary-safe) to decode so no bytes are dropped.
-    const raw = new TextDecoder('latin-1').decode(body);
+    // Using iso-8859-1 (binary-safe) to decode so no bytes are dropped.
+    const raw = new TextDecoder('iso-8859-1').decode(body);
 
     // Some older iOS versions send a raw (unsigned) plist directly.
     // Try to find the plist XML in whatever we received.
