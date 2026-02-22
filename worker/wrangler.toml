@@ -1,0 +1,13 @@
+name            = "udid-worker"
+main            = "index.js"
+compatibility_date = "2024-01-01"
+
+# Environment variables
+# Replace RESULT_URL with your actual GitHub Pages URL if different.
+[vars]
+RESULT_URL = "https://gru2007.github.io/clip-cards-link/udid/result.html"
+
+# Route that iOS will POST to (must match the URL in udid/udid.mobileconfig)
+# [[routes]]
+# pattern = "udid-worker.YOUR-ACCOUNT.workers.dev/enroll"
+# zone_name = "YOUR-ACCOUNT.workers.dev"

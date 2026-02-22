@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!--
+        Profile Service profile — iOS installs it and POSTs device attributes
+        (including UDID) to the URL below, then follows the 301/302 redirect.
+
+        SETUP: Replace the URL value with your deployed Cloudflare Worker URL,
+        e.g. https://udid-worker.YOUR-ACCOUNT.workers.dev/enroll
+    -->
+    <key>PayloadType</key>
+    <string>Profile Service</string>
+
+    <key>PayloadDisplayName</key>
+    <string>Получить UDID устройства</string>
+
+    <key>PayloadDescription</key>
+    <string>Профиль для однократного получения UDID. Можно удалить сразу после использования.</string>
+
+    <key>PayloadOrganization</key>
+    <string>SwiftGups Dev</string>
+
+    <key>PayloadIdentifier</key>
+    <string>tech.artemev.swiftgups.udid-fetch</string>
+
+    <key>PayloadUUID</key>
+    <string>A1B2C3D4-E5F6-7890-ABCD-EF1234567890</string>
+
+    <key>PayloadVersion</key>
+    <integer>1</integer>
+
+    <!-- Endpoint that receives the signed plist with device info -->
+    <key>PayloadContent</key>
+    <dict>
+        <key>URL</key>
+        <!-- ↓ Replace with your Cloudflare Worker URL ↓ -->
+        <string>https://udid-worker.YOUR-ACCOUNT.workers.dev/enroll</string>
+
+        <key>DeviceAttributes</key>
+        <array>
+            <string>UDID</string>
+            <string>PRODUCT</string>
+            <string>VERSION</string>
+            <string>SERIAL</string>
+            <string>IMEI</string>
+            <string>ICCID</string>
+        </array>
+    </dict>
+</dict>
+</plist>

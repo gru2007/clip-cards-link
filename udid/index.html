@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Получить UDID устройства</title>
+  <style>
+    :root {
+      --blue: #007AFF;
+      --blue-dark: #0056b3;
+      --bg: #f5f5f7;
+      --card: #ffffff;
+      --text: #1d1d1f;
+      --muted: #6e6e73;
+      --border: rgba(0,0,0,0.08);
+      color-scheme: light dark;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1c1c1e;
+        --card: #2c2c2e;
+        --text: #f5f5f7;
+        --muted: #aeaeb2;
+        --border: rgba(255,255,255,0.08);
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+    }
+    .card {
+      width: 100%;
+      max-width: 400px;
+      background: var(--card);
+      border-radius: 20px;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.10);
+      padding: 36px 32px 32px;
+      text-align: center;
+    }
+    .icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 18px;
+      background: var(--blue);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .icon svg { width: 38px; height: 38px; fill: #fff; }
+    h1 { font-size: 1.5rem; font-weight: 700; margin-bottom: 8px; }
+    .subtitle {
+      color: var(--muted);
+      font-size: 0.93rem;
+      line-height: 1.5;
+      margin-bottom: 28px;
+    }
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      background: var(--blue);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 14px;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      transition: background 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn:active { background: var(--blue-dark); }
+
+    .steps {
+      margin-top: 28px;
+      text-align: left;
+      border-top: 1px solid var(--border);
+      padding-top: 24px;
+    }
+    .steps-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+    .step {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+    .step-num {
+      min-width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--blue);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+    }
+    .step-text {
+      font-size: 0.88rem;
+      line-height: 1.45;
+      color: var(--text);
+    }
+    .note {
+      margin-top: 20px;
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .ios-only {
+      display: none;
+      background: #fff3cd;
+      color: #856404;
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 0.85rem;
+      margin-bottom: 16px;
+      line-height: 1.4;
+    }
+    @media (prefers-color-scheme: dark) {
+      .ios-only { background: #3d2e00; color: #ffd966; }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="icon">
+      <!-- Phone icon -->
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M17 2H7C5.9 2 5 2.9 5 4v16c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-5 18c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm5-3H7V4h10v13z"/>
+      </svg>
+    </div>
+
+    <h1>Получить UDID</h1>
+    <p class="subtitle">
+      Установите профиль конфигурации&nbsp;— iOS автоматически передаст UDID&nbsp;устройства и отобразит его на экране.
+    </p>
+
+    <div class="ios-only" id="notIOS">
+      Откройте эту страницу на&nbsp;iPhone или iPad в&nbsp;Safari.
+    </div>
+
+    <a href="udid.mobileconfig" class="btn" id="downloadBtn">
+      Установить профиль
+    </a>
+
+    <div class="steps">
+      <div class="steps-title">Как это работает</div>
+
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text">
+          Нажмите «Установить профиль» — Safari скачает конфигурационный файл.
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text">
+          iOS предложит установить профиль: откройте <b>Настройки → Профиль загружен</b> и подтвердите установку.
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text">
+          После установки Safari вернётся на эту страницу и покажет ваш UDID.
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-text">
+          Профиль можно сразу удалить: <b>Настройки → Основные → VPN и управление устройством</b>.
+        </div>
+      </div>
+    </div>
+
+    <p class="note">
+      Профиль не передаёт никаких личных данных и не предоставляет удалённый доступ к&nbsp;устройству.
+      Используется только для получения UDID.
+    </p>
+  </div>
+
+  <script>
+    // Предупредить пользователей не-iOS
+    const isIOS =
+      /iP(hone|od|ad)/.test(navigator.platform) ||
+      (navigator.userAgent.includes('Mac') && 'ontouchend' in document);
+
+    if (!isIOS) {
+      document.getElementById('notIOS').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
